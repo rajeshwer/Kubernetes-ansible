@@ -1,0 +1,27 @@
+---
+- name: create worker keys directory
+  file: name=/etc/kubernetes/ssl/ state=directory
+
+- name: set up worker TLS assets
+  copy: src={{LOCAL_SSL_DIR}}/{{item}} dest=/etc/kubernetes/ssl/{{item}}
+  with_items:
+  - ca.pem
+  - worker.pem
+  - worker-key.pem
+- file:
+    path: /etc/kubernetes/ssl/worker-key.pem
+    owner: root
+    group: root
+    mode: 600
+- file:
+    src: /etc/kubernetes/ssl/worker-key.pem
+    dest: /etc/kubernetes/ssl/worker-keysym.pem
+    owner: root
+    group: root
+    state: link
+- file:
+    src: /etc/kubernetes/ssl/worker.pem
+    dest: /etc/kubernetes/ssl/workersym.pem
+    owner: root
+    group: root
+    state: link

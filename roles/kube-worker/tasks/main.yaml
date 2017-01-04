@@ -1,0 +1,32 @@
+---
+    - file: path=/etc/flannel state=directory
+    - file: path=/etc/systemd/system/flanneld.service.d state=directory
+    - file: path=/etc/systemd/system/docker.service.d state=directory
+    - file: path=/etc/kubernetes/manifests state=directory
+    - file: path=/etc/kubernetes/cni/net.d state=directory
+    - name: install options.env
+      template: src=options.env dest=/etc/flannel
+    - name: install 40-ExecStartPre-symlink.conf
+      copy: src=40-ExecStartPre-symlink.conf dest=/etc/systemd/system/flanneld.service.d/
+    - name: install 40-flannel.conf
+      copy: src=40-flannel.conf dest=/etc/systemd/system/docker.service.d/
+    - name: Create the Docker CNI Options file
+      template: src=docker_opts_cni.env dest=/etc/kubernetes/cni/
+    - name: create kubelet unit
+      template: src=kubelet.service dest=/etc/systemd/system/
+    - name: create kube proxy
+      template: src=kube-proxy.yaml dest=/etc/kubernetes/manifests/
+    - name: create kubeconfig
+      template: src=worker-kubeconfig.yaml dest=/etc/kubernetes/
+    - name: Daemon-reload
+      command: systemctl daemon-reload
+    - name: ensure flanneld is running
+      service: name=flanneld state=started
+    - name: Ensure flanneld will start after boot
+      service: name=flanneld enabled=yes
+    - name: ensure docker is running
+      service: name=docker state=started
+    - name: Starting kubelet service
+      service: name=kubelet state=started
+    - name: Ensure kubelet will start after boot
+      service: name=kubelet enabled=yes
