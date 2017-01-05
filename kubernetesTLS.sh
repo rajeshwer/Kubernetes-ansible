@@ -70,12 +70,5 @@ then
    sed -i "" "s~ETCD_ENDPOINTS:.*~ETCD_ENDPOINTS: ${ETCD_ENDPOINTS}~" defaults/main.yaml
 fi
 
-read -p 'Enter ADVERTISE_IP : ' ADVERTISE_IP
-echo $ADVERTISE_IP
-if [ ! -z "$ADVERTISE_IP" ]
-then
-   echo $ADVERTISE_IP
-   sed -i "" "s~ADVERTISE_IP:.*~ADVERTISE_IP: ${ADVERTISE_IP}~" defaults/main.yaml
-fi
-
-ansible-playbook /Users/rajeshwerrao/kubrnetes/ansible/kubernetes-ansible/site.yaml
+cd ..
+ansible-playbook site.yaml

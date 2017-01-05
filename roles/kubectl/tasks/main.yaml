@@ -5,7 +5,6 @@
   get_url: url=https://storage.googleapis.com/kubernetes-release/release/v1.5.1/bin/linux/amd64/kubectl dest=/opt/local/bin/ mode=0755
 - name: Create core/kube direcoty
   file: name=/home/core/.kube owner=core group=core state=directory
-  when: SETUP_KUBECONFIG_ON_MASTER
 - name: set up admin TLS assets
   copy: 
     src={{LOCAL_SSL_DIR}}/{{item}}
@@ -15,9 +14,8 @@
     group=core
   with_items:
   - ca.pem
-  - admin-user.pem
-  - admin-user-key.pem
-  when: SETUP_KUBECONFIG_ON_MASTER
+  - admin.pem
+  - admin-key.pem
 
 - name: Create admin kubeconfig
   template:
@@ -25,4 +23,3 @@
     mode=0400
     owner=core 
     group=core
-  when: SETUP_KUBECONFIG_ON_MASTER
