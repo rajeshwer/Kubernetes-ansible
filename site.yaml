@@ -9,7 +9,7 @@
     - kube-master
     - kubectl	
 
-- hosts: worker
+- hosts: workers
   vars_files:
     - defaults/main.yaml
   become: yes
