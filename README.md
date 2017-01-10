@@ -14,6 +14,7 @@ export PATH=$PATH:/opt/bin
 ```
 Git clone https://github.com/rajeshwer/Kubernetes-ansible.git
 chmod  +x kubernetesTLS.sh
+./kubernetesTLS.sh
 ```
 ssh into one of master node and set path fo KUBECTL bin file
 
